@@ -37,9 +37,13 @@
 
 (defn add-todo
   [state]
-  (xiana/ok
-   (-> state
-       (assoc :response (ring-response/response "get-all-todos!")))))
+  (let [label (-> state :request :body-params :label)]
+    (xiana/ok
+     (-> state
+         (assoc :query {:insert-into :todo
+                        :columns [:label]
+                        :values [[label]]})
+         (assoc :view add-todo-view)))))
 
 (def routes
   [["/" {:action index/handle-index}]
@@ -47,11 +51,9 @@
    ["/assets/*" (ring/create-resource-handler {:path "/"})]
 
    ["/api" {}
-    ["/todos" (ring-response/response "hello")
-     ["/get-all"
-      {:action #'get-all-todos}]
-     ["/add"
-      {:action #'add-todo}]
+    ["/todos" {}
+     ["/get-all" {:get {:action #'get-all-todos}}]
+     ["/add" {:post {:action #'add-todo}}]
      ["/mark-done/:id"
       {:action #'mark-todo-done}]]]])
 

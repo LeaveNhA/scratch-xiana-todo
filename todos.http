@@ -1,0 +1,33 @@
+#
+# Global vars
+#
+:dev = http://localhost:3000
+:prod = http://localhost:3000
+:local = http://localhost:3000
+:url = :local
+:api-url = :url/api
+
+
+#
+# Headers
+#
+:headers = <<
+Content-Type: application/json
+#
+
+#
+# TODOs
+#
+# get all todos
+GET :api-url/todos/get-all
+:headers
+#
+
+# post body JSON
+POST :api-url/todos/add
+:headers
+
+{
+  "label": "example 111111 7777"
+}
+#
